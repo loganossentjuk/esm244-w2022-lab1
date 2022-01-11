@@ -99,5 +99,21 @@ ex_5 <- sf_trees %>%
 ```
 
 
+### Part 2: make some maps 
+
+**Step 1:** convert lat/lon to spatial point, `st_as_sf()`
+
+```{r}
+blackwood_acacia_sf <- blackwood_acacia_df %>% 
+  drop_na(lat, lon) %>% 
+  st_as_sf(coords = c('lon', 'lat'))
+
+### we need to tell R what the coordinate reference system is 
+
+st_crs(blackwood_acacia_sf) <- 4326 # This is the EPSG number for the basic WGS84 lat and lon in degrees
+
+ggplot(data = blackwood_acacia_sf) +
+  geom_sf(color = 'darkgreen')
+```
 
 
