@@ -17,3 +17,57 @@ library(tmap)
 ```
 
 
+### Read in the data 
+
+```{r}
+sf_trees <- read_csv(here('data', 'sf_trees', 'sf_trees.csv'))
+```
+
+
+### Part 1: Wrangling and ggplot review 
+
+**Example 1:** Find couunts of observation by `legal_status` & wrangle a bit.
+
+```{r}
+### Method 1: group_by() %>%  summarize()
+
+sf_trees %>% 
+  group_by(legal_status) %>% #groups sf_trees by legal_status
+  summarize(tree_count = n()) #outputs the count of each value in legal status
+
+### Method 2: different way plus a few new functions
+
+top_5_status <- sf_trees %>% 
+  count(legal_status) %>% #outputs count of each value and groups by legal_status
+  drop_na(legal_status) %>%  #drops any na values in legal_status
+  rename(tree_count = n) %>% 
+  relocate(tree_count) %>%  #brings given column name to the front of the data set
+  slice_max(tree_count, n = 5) %>%  #slices out the top 5 values in tree_count
+  arrange(-tree_count) #arranges by tree_count descending (b/c of - sign) (can also do arrange(desc(tree_count))
+
+```
+
+
+Make a graph of the top 5 from above: 
+
+```{r}
+ggplot(data = top_5_status, aes(x = fct_reorder(legal_status, tree_count), y = tree_count)) +
+  geom_col(fill = 'darkgreen') +
+  labs(x = 'Legal status', y = 'Tree count') +
+  coord_flip() + #switches columns to face horizontally 
+  theme_minimal()
+
+```
+
+
+### **Example 2:** Only going to keep bservations where legal status is "Permitted Site" and caretaker is "MTA", and stores is `permitted_data_df`
+
+shift-command-c to comment/uncomment a line quickly
+```{r}
+# sf_trees$legal_status %>% unique()
+# unique(sf_trees$caretaker)
+permitted_data_df <- sf_trees %>% 
+  filter(legal_status == 'Permitted Site', caretaker == 'MTA') #, or & for and, | for or=
+```
+
+**Example 3:** Only keep Blackwood Acacia trees, and then only keep columns `legal_status`, `date`, `latitude`, and stores as `blackwood_acacia_df`
