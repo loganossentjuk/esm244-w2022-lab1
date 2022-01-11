@@ -1,0 +1,19 @@
+---
+title: "ESM 244 Lab 1"
+author: "Logan Ossentjuk"
+date: "1/10/2022"
+output: html_document
+---
+
+```{r setup, include=TRUE, warning = FALSE, message = FALSE} 
+#Includes what packages are libraries
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(here)
+library(sf)
+library(tmap)
+### Update packages(ask = FALSE)
+```
+
+
