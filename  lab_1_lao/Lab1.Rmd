@@ -67,7 +67,17 @@ shift-command-c to comment/uncomment a line quickly
 # sf_trees$legal_status %>% unique()
 # unique(sf_trees$caretaker)
 permitted_data_df <- sf_trees %>% 
-  filter(legal_status == 'Permitted Site', caretaker == 'MTA') #, or & for and, | for or=
+  filter(legal_status %in% c('Permitted Site', 'Private'), caretaker == 'MTA') #, or & for and, | for or=
 ```
 
 **Example 3:** Only keep Blackwood Acacia trees, and then only keep columns `legal_status`, `date`, `latitude`, and stores as `blackwood_acacia_df`
+
+```{r}
+blackwood_acacia_df <- sf_trees %>% 
+  filter(str_detect(species, 'Blacwood Acacia')) %>%  #str_detect finds a given string within a row even if there is other text within it 
+  select(legal_status, data, lat = latitude, lon = longitude)
+
+### Make a little graph of locations. 
+
+```
+
